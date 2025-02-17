@@ -60,7 +60,7 @@ const addMsgToRequest = (req: UserRequest, res: Response, next: NextFunction) =>
 // a middleware function the verifies the origin of the request using a cors package
 app.use(cors({ origin: 'http://localhost:3000' }));
 // adds the middleware function to the application
-app.use('/read/usernames', addMsgToRequest);
+app.use('/read', addMsgToRequest);
 
 // a route that sends the usernames of the users to the client
 app.get('/read/usernames', (req: UserRequest, res: Response) => {
@@ -93,6 +93,13 @@ app.post('/write/adduser', async (req: UserRequest, res: Response) => {
     console.log('Failed to write:', err);
     res.status(500).send('Error saving user');
   }
+});
+
+// a route that sends the usernames of the users to the client
+app.get('/read/username/:name', (req: UserRequest, res: Response) => {
+  let username = req.params.name;
+  let user = req.users?.filter(user => user.username === username);
+  return res.send(user);
 });
 
 app.listen(port, () => {
